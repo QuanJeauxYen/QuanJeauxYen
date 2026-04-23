@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quan Jeaux Yen — Sound Engineer</title>
+<link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #1a1a1a;
+            --bg-secondary: #242424;
+            --text: #d4d4d4;
+            --text-dim: #7a7a7a;
+            --accent: #7aa2f7;
+            --accent-dim: #4a6fa5;
+            --green: #9ece6a;
+            --red: #f7768e;
+            --yellow: #e0af68;
+            --border: #333;
+            --code-bg: #1e1e1e;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        code, .mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Header/Terminal Bar */
+        header {
+            background: var(--code-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .terminal-bar {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            gap: 12px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: var(--red); }
+        .dot.yellow { background: var(--yellow); }
+        .dot.green { background: var(--green); }
+
+        .terminal-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-left: 12px;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-content a {
+            display: block;
+            padding: 16px 0;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 14px;
+            font-family: 'Fira Code', monospace;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-content a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Hero / Intro */
+        .intro {
+            padding: 80px 0 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .prompt {
+            font-family: 'Fira Code', monospace;
+            color: var(--green);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .prompt .user { color: var(--accent); }
+        .prompt .path { color: var(--yellow); }
+        .prompt .symbol { color: var(--green); }
+
+        h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-dim);
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .info-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+        }
+
+        .info-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .info-value a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .info-value a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        /* Sections */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-header h2 {
+            font-family: 'Fira Code', monospace;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .section-header h2::before {
+            content: '# ';
+            color: var(--text-dim);
+        }
+
+        .section-header p {
+            font-size: 15px;
+            color: var(--text-dim);
+        }
+
+        /* Collapsible sections */
+        .section-header {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h2::after {
+            content: ' [-]';
+            font-size: 14px;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .section-header.collapsed h2::after {
+            content: ' [+]';
+        }
+
+        .section-content {
+            overflow: hidden;
+            max-height: 20000px;
+            opacity: 1;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        /* Work Items */
+        .work-list {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .work-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .work-item:hover {
+            border-color: var(--accent-dim);
+        }
+
+        .work-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .work-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .work-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            background: var(--code-bg);
+            padding: 4px 10px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+        }
+
+        .work-body {
+            padding: 24px;
+        }
+
+        .work-media {
+            width: 100%;
+            margin-bottom: 20px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .work-media iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .work-media.video {
+            aspect-ratio: 16/9;
+        }
+
+        /* Custom self-hosted video player */
+        .video-native-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #0d0d0d;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .video-native-wrap video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            outline: none;
+        }
+
+        .video-native-wrap video:focus-visible {
+            box-shadow: 0 0 0 2px var(--accent);
+        }
+
+        .video-caption {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            color: var(--text-dim);
+            padding: 8px 0 0 2px;
+            letter-spacing: 0.02em;
+        }
+
+        .work-media.audio {
+            height: 152px;
+            padding: 0;
+            background: var(--bg-secondary);
+        }
+
+        .work-media.audio-soundcloud {
+            height: 120px;
+            padding: 0;
+            background: var(--bg-secondary);
+        }
+
+        .work-media.audio-dual {
+            height: auto;
+            padding: 20px;
+        }
+
+        .audio-section {
+            margin-bottom: 16px;
+        }
+
+        .audio-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .audio-label {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+
+        .work-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-dim);
+        }
+
+        /* About */
+        .about-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+        }
+
+        .about-text p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+            color: var(--text-dim);
+        }
+
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-details {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            padding: 24px;
+            height: fit-content;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .detail-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-dim);
+        }
+
+        .detail-content div {
+            margin-bottom: 4px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--code-bg);
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            text-align: center;
+        }
+
+        footer p {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .container {
+                padding: 0 24px;
+            }
+
+            .nav-content {
+                padding: 0 24px;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .intro {
+                padding: 60px 0 40px;
+            }
+
+            section {
+                padding: 40px 0;
+            }
+
+            .work-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Custom audio player */
+        audio {
+            width: 100%;
+            height: 32px;
+        }
+
+        audio::-webkit-media-controls-panel {
+            background-color: var(--code-bg);
+        }
+
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-mute-button {
+            filter: invert(0.8);
+        }
+
+        audio::-webkit-media-controls-timeline {
+            filter: invert(0.8);
+        }
+
+        /* BIOS Splash Screen */
+        #bios-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #0f0;
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px;
+            z-index: 10000;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+
+        #bios-splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .bios-line {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 0.1s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .bios-header {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .bios-ok {
+            color: #0f0;
+        }
+
+        .bios-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #0f0;
+            margin-left: 4px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- BIOS Splash Screen -->
+    <div id="bios-splash">
+        <div id="bios-content"></div>
+    </div>
+    <!-- Terminal Header -->
+    <header>
+        <div class="terminal-bar">
+            <div class="terminal-dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="terminal-title">quan@portfolio:~$</div>
+        </div>
+        <nav>
+            <div class="nav-content">
+                <a href="#work">~/work</a>
+                <a href="#about">~/about</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Intro Section -->
+    <section class="intro">
+        <div class="container">
+            <div class="prompt">
+                <span class="user">quan@audio</span><span class="symbol">:</span><span class="path">~</span><span class="symbol">$</span> cat intro.txt
+            </div>
+            <h1>Quan Nguyen</h1>
+            <p class="subtitle">Sound engineer and post-production specialist. Based in Melbourne, creating immersive audio across film, television, and music.</p> 
+            <p class="subtitle">CV available upon request.</p>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">location</div>
+                    <div class="info-value">Melbourne, AU — Relocating to Toronto, CA</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">contact</div>
+                    <div class="info-value"><a href="mailto:info@quanjeauxyen.work">info@quanjeauxyen.work</a></div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">specialization</div>
+                    <div class="info-value">Sound Engineering and Post-Production Audio</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">status</div>
+                    <div class="info-value">Open to full-time and freelance opportunities</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work">
+        <div class="container">
+            <div class="section-header">
+                <h2>work</h2>
+                <p>Selected projects across post-production, music, and sound design</p>
+            </div>
+
+            <div class="section-content" id="work-content">
+            <div class="work-list">
+                <!-- TV Pilot -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">Unreleased TV Project (Comedy Pilot) — Dir. Nicholas Reynolds, Major Australian Network</div>
+                        <div class="work-tag">post-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="video-native-wrap">
+                            <video
+                                controls
+                                preload="metadata"
+                                src="https://assets.quanjeauxyen.work/Deep-End-Scene-6-Portfolio-720.mp4"
+                            >
+                                Your browser does not support the video element.
+                            </video>
+                        </div>
+                        <div class="video-caption">// scene 6 — portfolio cut</div>
+                        <div class="work-description">
+                            Supervising sound editor. Dialogue restoration using iZotope RX, ADR supervision, and broadcast-spec mixing for network comedy pitch. Held final decision authority on all audio post-production.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Indie Rock EP -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">Michael Yanko (Indie Rock EP) — "Michael Yanko", Montague Street Bridge</div>
+                        <div class="work-tag">music-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio" style="height:auto; padding:16px;">
+                            <div class="audio-label">// michael yanko</div>
+                            <audio controls src="https://assets.quanjeauxyen.work/Michael-Yanko.mp3" style="width:100%;"></audio>
+                            <div class="audio-label">// teeth below the floor</div>
+                            <audio controls src="https://assets.quanjeauxyen.work/Teeth-Below-the-Floor.mp3" style="width:100%;"></audio>
+                            <div class="audio-label">// flu</div>
+                            <audio controls src="https://assets.quanjeauxyen.work/Flu.mp3" style="width:100%;"></audio>
+                        </div>
+                        <div class="work-description">
+                            Mixed and mastered 5-track debut EP for Melbourne-based rock band. University project delivered at 24-bit/48kHz, optimized for streaming platforms.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip-Hop LP -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">hard rubbish (Trip-Hop / Alt Hip-Hop LP) — No Contact is Good Contact, slygrog</div>
+                        <div class="work-tag">music-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio">
+                            <iframe style="border-radius:4px" src="https://open.spotify.com/embed/track/52togPbBx6eEUAiNu2tc4J?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </div>
+                        <div class="work-description">
+                            Lead mix engineer for complex 11-track project. Hybrid mixing workflow using UAD analog emulation and FabFilter precision tools, seamlessly integrating lo-fi digital samples with live instrumentation.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip-Hop Snippet 2 -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">hard rubbish — The Heroes of Your Heroes Are Bad People, slygrog</div>
+                        <div class="work-tag">music-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio">
+                            <iframe style="border-radius:4px" src="https://open.spotify.com/embed/track/0bFKKQp8c4ShpahTyWZUAy?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        </div>
+                        <div class="work-description">
+                            Achieving vintage warmth with modern clarity across alternative hip-hop influences.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip-Hop Snippet 3 -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">hard rubbish — I Couldn't Be Less Qualified To Teach You Anything, slygrog</div>
+                        <div class="work-tag">music-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio">
+                            <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/0tNZ5Obkd5Vtf8TFPlN1nt?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                     </div>
+                            <div class="work-description">
+                            Cohesive sonic identity maintained across full LP.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DJ Set -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">I Wish Peanut Allergies Were Real (Live Vinyl DJ Set) — mushroomsamba</div>
+                        <div class="work-tag">performance</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio-soundcloud">
+                            <iframe width="100%" height="152" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/lucasiscoolerthanyou/i-wish-peanut-allergies-were-real-vinyl-set&color=%237aa2f7&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false"></iframe>
+                        </div>
+                        <div class="work-description">
+                            Live-recorded DJ set of local melbourne DJ "mushroomsamba". Entire set was mixed and mastered to ensure streaming service readiness. @amushroomsamba on Instagram and Mixcloud.
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Music Video 1 -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">Bon Vivant (Multimedia Project) — "Fight For Me", Jason Yen</div>
+                        <div class="work-tag">multimedia</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media video">
+                            <iframe src="https://www.youtube.com/embed/SFTjrQ47lqY" allowfullscreen></iframe>
+                        </div>
+                        <div class="work-description">
+                            Creative director and lead engineer for multimedia project. Full-cycle production including composition, 24-bit/48kHz tracking, and final stereo mastering. 10,000 Spotify streams, 100,000+ YouTube views across series.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Music Video 2 -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">Bon Vivant (Cont.) — "Real One", Jason Yen</div>
+                        <div class="work-tag">multimedia</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media video">
+                            <iframe src="https://www.youtube.com/embed/Cp1Dm0w0SHc" allowfullscreen></iframe>
+                        </div>
+                        <div class="work-description">
+                            Part of high-concept multimedia series spanning music and film.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Short Film -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">The Other Half (Short Film) — Dir. Felix Wilkins, Yabba Films</div>
+                        <div class="work-tag">sound-design</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media video">
+                            <iframe src="https://youtube.com/embed/Zj0Mi7osm1c" allowfullscreen></iframe>
+                        </div>
+                        <div class="work-description">
+                            Sound effects design and foley recording for narrative short film. Full audio post-production workflow.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dialogue Restoration -->
+                <div class="work-item">
+                    <div class="work-header">
+                        <div class="work-title">Dialogue Restoration — Before & After</div>
+                        <div class="work-tag">post-production</div>
+                    </div>
+                    <div class="work-body">
+                        <div class="work-media audio-dual">
+                            <div class="audio-section">
+                                <div class="audio-label">// before</div>
+                                <audio controls src="https://assets.quanjeauxyen.work/Michael-Yanko.mp3"></audio>
+                            </div>
+                            <div class="audio-section">
+                                <div class="audio-label">// after</div>
+                                <audio controls src="https://assets.quanjeauxyen.work/Michael-Yanko.mp3"></audio>
+                            </div>
+                        </div>
+                        <div class="work-description">
+                            Audio cleanup and restoration using iZotope RX. Noise reduction, EQ, and vocal enhancement for broadcast-quality output.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>about</h2>
+            </div>
+
+            <div class="section-content" id="about-content">
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I'm Quan — a sound engineer and post-production specialist based in Melbourne, Australia, relocating to Toronto, Canada in mid-2026.</p>
+                    
+                    <p>My work spans film and television post-production, music mixing and mastering, and sound design. I've delivered audio for major independent network television, independent films, and music projects across multiple genres including rock, hip-hop, and electronic.</p>
+                    
+                    <p>I hold a Diploma of Sound Production from RMIT University (2022) and have experience working with industry-standard tools including Pro Tools, Ableton Live, Logic, and DaVinci Fairlight. My workflow integrates analog emulation (UAD), precision processing (FabFilter, Waves), and strict adherence to broadcast standards (ATSC A/85, streaming optimization).</p>
+
+                    <p>Outside of client work, I produce experimental pop/R&B and electronic music under the name Anton Nouveau. Beyond the studios, dancefloors, and concert halls, you can find me winding down beside a punching bag practicing my Muay Thai, or in the gym, trying to hit a heavy PR. The balance between work, life, and self-improvement in all facets is what gets me motivated every day.</p>
+                </div>
+
+                <div class="about-details">
+                    <div class="detail-section">
+                        <div class="detail-title">// education</div>
+                        <div class="detail-content">
+                            <div>Diploma of Sound Production</div>
+                            <div>@RMIT University (2022)</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">// specializations</div>
+                        <div class="detail-content">
+                            <div>Post-Production Audio</div>
+                            <div>Dialogue Editing & ADR</div>
+                            <div>Music Mixing & Mastering</div>
+                            <div>Sound Design & Foley</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">// tools</div>
+                        <div class="detail-content">
+                            <div>Pro Tools, Ableton, Logic</div>
+                            <div>Fairlight / DaVinci Resolve</div>
+                            <div>iZotope RX, Melodyne</div>
+                            <div>UAD, FabFilter, Waves</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-title">// contact</div>
+                        <div class="detail-content">
+                            <div><a href="mailto:info@quanjeauxyen.work">info@quanjeauxyen.work</a></div>
+                            <div>Melbourne, AU — Relocating to Toronto, CA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 Quan Jeaux Yen — quanjeauxyen.work</p>
+        </div>
+    </footer>
+
+    <script>
+        // BIOS Boot Sequence
+        const biosLines = [
+            { text: 'AUDIO WORKSTATION BIOS v2.4.1', className: 'bios-header' },
+            { text: 'Copyright (C) 2026, Quan Nguyen Audio Systems', className: '' },
+            { text: '', className: '' },
+            { text: 'Processor: Intel(R) Audio DSP @ 4.2GHz', className: '' },
+            { text: 'Memory Test: 16384MB OK', className: 'bios-ok' },
+            { text: 'Audio Interfaces: 8 Detected', className: 'bios-ok' },
+            { text: '', className: '' },
+            { text: 'Initializing audio drivers...', className: '' },
+            { text: 'Loading project database...', className: '' },
+            { text: 'Mounting portfolio filesystem...', className: 'bios-ok' },
+            { text: '', className: '' },
+            { text: 'Boot sequence complete.', className: 'bios-ok' },
+            { text: 'Starting portfolio interface...', className: '' },
+        ];
+
+        let lineIndex = 0;
+        const biosContent = document.getElementById('bios-content');
+        const biosSplash = document.getElementById('bios-splash');
+
+        function displayBiosLine() {
+            if (lineIndex < biosLines.length) {
+                const lineData = biosLines[lineIndex];
+                const line = document.createElement('div');
+                line.className = `bios-line ${lineData.className}`;
+                line.textContent = lineData.text;
+                biosContent.appendChild(line);
+                lineIndex++;
+                
+                const delay = lineData.text === '' ? 100 : Math.random() * 150 + 50;
+                setTimeout(displayBiosLine, delay);
+            } else {
+                // Add cursor
+                const cursor = document.createElement('span');
+                cursor.className = 'bios-cursor';
+                biosContent.appendChild(cursor);
+                
+                // Fade out after brief pause
+                setTimeout(() => {
+                    biosSplash.classList.add('hidden');
+                    setTimeout(() => {
+                        biosSplash.style.display = 'none';
+                    }, 500);
+                }, 800);
+            }
+        }
+
+        // Start BIOS sequence on load
+        window.addEventListener('load', () => {
+            setTimeout(displayBiosLine, 300);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 120;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Active nav state
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.color = 'var(--text-dim)';
+                link.style.borderBottomColor = 'transparent';
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.style.color = 'var(--accent)';
+                    link.style.borderBottomColor = 'var(--accent)';
+                }
+            });
+        });
+        // Collapsible sections
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                if (content && content.classList.contains('section-content')) {
+                    header.classList.toggle('collapsed');
+                    content.classList.toggle('collapsed');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
